@@ -24,7 +24,6 @@ func LoadConfig() Config {
 }
 
 
-// DSN builds the PostgreSQL connection string that GORM needs.
 func (c Config) DSN() string {
 	return fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=UTC",
