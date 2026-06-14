@@ -12,7 +12,7 @@ import (
 )
 
 
-func RequiredAuth(c *gin.Context) {
+func RequireAuth(c *gin.Context) {
 	authHeader := c.GetHeader("Authorization")
 	if !strings.HasPrefix(authHeader, "Bearer ") {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Missing token"})
