@@ -1,4 +1,4 @@
-package fooddashapi
+package main
 
 import (
 	"fooddash-api/config"
@@ -10,16 +10,16 @@ import (
 	"log"
 
 	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
-
 
 func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file — using environment variables")
 	}
 
-	cfg := config.LoadConfig()
+	cfg := config.Load()
 	handlers.SetConfig(cfg)
 	db.Connect(cfg)
 
@@ -30,6 +30,6 @@ func main() {
 	r.GET("/ws/orders/:id", handlers.ServeWS)
 
 	routes.SetupRoutes(r)
-	log.Printf("Starting server on %s", cfg.Port)
+	log.Printf("Starting server on :%s", cfg.Port)
 	r.Run(":" + cfg.Port)
 }
