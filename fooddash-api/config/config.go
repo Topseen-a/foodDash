@@ -11,7 +11,7 @@ type Config struct {
 }
 
 
-func LoadConfig() Config {
+func Load() Config {
 	return Config{
 		DBHost:getEnv("DB_HOST","localhost"),
 		DBUser:getEnv("DB_USER","postgres"),

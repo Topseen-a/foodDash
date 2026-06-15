@@ -3,7 +3,7 @@ package middleware
 import "github.com/gin-contrib/cors"
 
 
-func CorsConfig() cors.Config {
+func CORSConfig() cors.Config {
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"http://localhost:5173"}
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
