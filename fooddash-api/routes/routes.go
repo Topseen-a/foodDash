@@ -34,11 +34,11 @@ func SetupRoutes(router *gin.Engine) {
 
 	staff := api.Group("/staff")
 	staff.Use(middleware.RequireAuth, middleware.RequireStaff)
-	staff.GET("/orders",handlers.GetTodaysOrders)
-	staff.PATCH("/orders/:id/status",handlers.UpdateOrderStatus)
-	staff.GET("/menu",handlers.GetMenuAdmin)
-	staff.POST("/menu",handlers.CreateMenuItem)
-	staff.PUT("/menu/:id",handlers.UpdateMenuItem)
-	staff.PATCH("/menu/:id/availability", handlers.ToggleAvailability)
-	staff.POST("/categories", handlers.CreateCategory)
+	// staff.GET("/orders",handlers.GetTodaysOrders)
+	// staff.PATCH("/orders/:id/status",handlers.UpdateOrderStatus)
+	// staff.GET("/menu",handlers.GetMenuAdmin)
+	// staff.POST("/menu",handlers.CreateMenuItem)
+	// staff.PUT("/menu/:id",handlers.UpdateMenuItem)
+	// staff.PATCH("/menu/:id/availability", handlers.ToggleAvailability)
+	// staff.POST("/categories", handlers.CreateCategory)
 }
