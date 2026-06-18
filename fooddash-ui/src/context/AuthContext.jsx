@@ -7,7 +7,7 @@ export function AuthProvider({children}) {
      const [user,setUser] = useState(()=>JSON.parse(localStorage.getItem('user') || 'null')); 
      
      const login=async(email, password)=> { 
-        const{ data}= awaitloginAPI({email,password}); 
+        const{ data}= await loginAPI({email,password}); 
      localStorage.setItem('token',data.token);
      localStorage.setItem('user', JSON.stringify(data.user)); 
      setUser(data.user); return data.user;
@@ -15,7 +15,7 @@ export function AuthProvider({children}) {
      }; 
      const register= async(name,email,password)=> { 
         const{ data}= await registerAPI({name,email,password});
-         returndata; }; 
+         return data; }; 
          const logout= ()=>{ localStorage.removeItem('token'); 
             localStorage.removeItem('user'); setUser(null); }; 
             return( 

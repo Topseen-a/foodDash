@@ -1,5 +1,5 @@
 import { createContext,useContext,useState,useEffect} from 'react'; 
-import { getCart} from '../api/endpoints'; 
+// import { getCart} from '../api/endpoints'; 
 import{ useAuth}from'./AuthContext';
 
 const CartContext= createContext(null); 
@@ -13,8 +13,8 @@ export function CartProvider({children}) {
             return;
         } 
         try{
-            const{data} = await getCart();
-            setCart(data.data);
+            // const{data} = await getCart();
+            // setCart(data.data);
         } catch{ 
             setCart(null);
         } 
@@ -28,4 +28,4 @@ export function CartProvider({children}) {
         </CartContext.Provider> 
         ); 
     } 
-    export const useCart=() => useContext(CartContext);
+export const useCart=() => useContext(CartContext);

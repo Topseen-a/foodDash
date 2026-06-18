@@ -4,10 +4,11 @@ const api= axios.create({
     
     // Attach JWT token automatically to every request. 
     api.interceptors.request.use(config=> { 
-        consttoken=localStorage.getItem('token'); 
+        const token=localStorage.getItem('token'); 
         if (token)
-            config.headers.Authorization=`Bearer${token}`; 
-        returnconfig; }); 
+            config.headers.Authorization=`Bearer ${token}`; 
+        console.log(token)
+        return config; }); 
         
         // 401 means token expired— clear storage and redirect to login. 
         api.interceptors.response.use( response=>response, error=>{
