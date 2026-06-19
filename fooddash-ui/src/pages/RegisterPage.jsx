@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate,Link } from 'react-router-dom'; 
 import { useAuth} from '../context/AuthContext'; 
 
+
 export default function RegisterPage(){ 
     const{register} = useAuth();
     const navigate = useNavigate(); 
@@ -21,7 +22,7 @@ export default function RegisterPage(){
             setLoading(false);
         } 
     }; 
-    return( 
+    return (
         <div className='max-w-md mx-auto mt-16 p-8 bg-white rounded-xl shadow'> 
         <h1 className='text-2xl font-bold mb-6 text-center'>Create Account</h1> 
         <form onSubmit={handleSubmit} className='space-y-4'> 
@@ -35,6 +36,6 @@ export default function RegisterPage(){
         </form> 
         <p className='text-center mt-4 text-sm'>Have an account?<Link to='/login' className='text-orange-500'>Login</Link>
         </p> 
-        </div> 
-        ); 
-    }
+        </div>
+    );
+}

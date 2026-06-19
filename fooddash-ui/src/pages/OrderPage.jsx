@@ -1,5 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useOrderStatus } from "../hooks/useOrderStatus";
+
+
 function StatusBadge({ status }) {
   const s = {
     RECEIVED: "bg-blue-100 text-blue-700",
@@ -18,6 +20,8 @@ ${s[status] || ""}`}
     </span>
   );
 }
+
+
 function StatusTracker({ status, type }) {
   const steps = [
     "RECEIVED",
@@ -45,6 +49,8 @@ function StatusTracker({ status, type }) {
     </div>
   );
 }
+
+
 export default function OrderPage() {
   const { id } = useParams();
   const { order } = useOrderStatus(id); // polling now, WebSocket in W3

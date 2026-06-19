@@ -9,7 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-
 func PlaceOrder(c *gin.Context) {
 	user, _ := c.MustGet("currentUser").(models.User)
 	var input models.PlaceOrderInput
@@ -41,10 +40,10 @@ func PlaceOrder(c *gin.Context) {
 	var order models.Order
 	err := db.DB.Transaction(func(tx *gorm.DB) error {
 		order = models.Order{
-			UserID: user.ID,
-			Type: input.Type,
-			Status: models.StatusReceived,
-			TotalAmount: total,
+			UserID:          user.ID,
+			Type:            input.Type,
+			Status:          models.StatusReceived,
+			TotalAmount:     total,
 			DeliveryAddress: input.DeliveryAddress,
 		}
 
@@ -52,12 +51,19 @@ func PlaceOrder(c *gin.Context) {
 			return err
 		}
 
+		if err := tx.Create(&models.OrderEvent{
+			OrderID: order.ID,
+			Status:  models.StatusReceived,
+		}).Error; err != nil {
+			return err
+		}
+
 		for _, ci := range fullCart.CartItems {
 			oi := models.OrderItem{
-				OrderID: order.ID,
-				MenuItemID: ci.MenuItemID,
-				Quantity: ci.Quantity,
-				UnitPrice: ci.MenuItem.Price,
+				OrderID:             order.ID,
+				MenuItemID:          ci.MenuItemID,
+				Quantity:            ci.Quantity,
+				UnitPrice:           ci.MenuItem.Price,
 				SpecialInstructions: ci.SpecialInstructions,
 			}
 
@@ -71,35 +77,74 @@ func PlaceOrder(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return	
+		return
 	}
 
 	db.DB.Preload("Items.MenuItem").First(&order, order.ID)
 	c.JSON(http.StatusCreated, gin.H{"data": order})
 }
 
-
 func GetMyOrders(c *gin.Context) {
 	user, _ := c.MustGet("currentUser").(models.User)
 	var orders []models.Order
-	err := db.DB.Where("user_id = ?", user.ID).Order("created_at desc").Preload("Items.MenuItem").Find(&orders).Error
+	err := db.DB.
+		Where("user_id = ?", user.ID).
+		Order("created_at desc").
+		Preload("Items.MenuItem").
+		Preload("Events").
+		Find(&orders).Error
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	
+
 	c.JSON(http.StatusOK, gin.H{"data": orders})
 }
-
 
 func GetOrder(c *gin.Context) {
 	user, _ := c.MustGet("currentUser").(models.User)
 	var order models.Order
-	err := db.DB.Where("id = ? AND user_id = ?", c.Param("id"), user.ID).Preload("Items.MenuItem").First(&order).Error
+	err := db.DB.
+		Where("id = ? AND user_id = ?", c.Param("id"), user.ID).
+		Preload("Items.MenuItem").
+		Preload("Events").
+		First(&order).Error
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": order})
+}
+
+func UpdateOrderStatus(c *gin.Context) {
+	var order models.Order
+	var input models.UpdateOrderStatusInput
+
+	if err := db.DB.First(&order, c.Param("id")).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
+		return
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	order.Status = input.Status
+
+	if err := db.DB.Save(&order).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := db.DB.Create(&models.OrderEvent{
+		OrderID: order.ID,
+		Status:  input.Status,
+	}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 // import { getMyOrders } from "../api/endpoints";
+
+
 function StatusBadge({ status }) {
   const s = {
     RECEIVED: "bg-blue-100 text-blue-700",
@@ -18,6 +20,8 @@ function StatusBadge({ status }) {
     </span>
   );
 }
+
+
 export default function OrderHistoryPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);

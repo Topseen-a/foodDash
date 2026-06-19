@@ -2,30 +2,38 @@ import { createContext,useContext,useState,useEffect} from 'react';
 // import { getCart} from '../api/endpoints'; 
 import{ useAuth}from'./AuthContext';
 
-const CartContext= createContext(null); 
+
+const CartContext= createContext(null);
+
+
 export function CartProvider({children}) {
      const {user} = useAuth(); 
-     const [cart,setCart] = useState(null); // item Count drives the cart badge in the Navbar. 
+     const [cart,setCart] = useState(null);
+     // item Count drives the cart badge in the Navbar.
      const itemCount=cart?.items?.reduce((sum,i)=> sum + i.quantity,0) ||0;
-     const refreshCart = async()=> { 
-        if (!user){ 
+
+
+     const refreshCart = async()=> {
+         if (!user){
             setCart(null);
             return;
-        } 
+         }
         try{
             // const{data} = await getCart();
             // setCart(data.data);
-        } catch{ 
-            setCart(null);
-        } 
-    }; 
-    useEffect(()=> {
-        refreshCart();
-    }, [user]); 
-    return( 
-        <CartContext.Provider value={{cart,itemCount,refreshCart}}> 
-        {children} 
-        </CartContext.Provider> 
-        ); 
-    } 
+         } catch {
+             setCart(null);
+         }
+     };
+
+
+     useEffect(()=> { refreshCart(); }, [user]);
+     return(
+         <CartContext.Provider value={{cart,itemCount,refreshCart}}>
+             {children}
+         </CartContext.Provider>
+     );
+}
+
+
 export const useCart=() => useContext(CartContext);

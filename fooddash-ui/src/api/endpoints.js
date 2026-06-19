@@ -1,5 +1,6 @@
  import api from './client'; 
- 
+
+
  // All API calls in one file—easy to find and update. 
  export const register = data => api.post('/auth/register',data); 
  export const login = data => api.post('/auth/login',data); 

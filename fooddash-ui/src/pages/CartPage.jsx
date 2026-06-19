@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 // import { updateCartItem, removeCartItem, placeOrder } from "../api/endpoints";
+
+
 export default function CartPage() {
   const { cart, refreshCart } = useCart();
   const navigate = useNavigate();
@@ -13,6 +15,8 @@ export default function CartPage() {
   const total =
     cart?.items?.reduce((sum, i) => sum + i.menu_item.price * i.quantity, 0) ||
     0;
+
+
   const handleQty = async (itemId, newQty) => {
     if (newQty < 1) return;
     try {
@@ -22,6 +26,8 @@ export default function CartPage() {
       alert("Could not update item");
     }
   };
+
+
   const handleRemove = async (itemId) => {
     try {
       await removeCartItem(itemId);
@@ -30,6 +36,8 @@ export default function CartPage() {
       alert("Could not remove item");
     }
   };
+
+
   const handlePlaceOrder = async () => {
     if (orderType === "delivery" && !address.trim()) {
       setError("Enter a delivery address");
@@ -50,6 +58,7 @@ export default function CartPage() {
       setPlacing(false);
     }
   };
+  
   if (!cart || cart.items?.length === 0)
     return (
       <div className="text-center py-20">

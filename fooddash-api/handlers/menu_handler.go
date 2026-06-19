@@ -1,12 +1,12 @@
 package handlers
 
 import (
-	"net/http"
-	"github.com/gin-gonic/gin"
 	"fooddash-api/db"
 	"fooddash-api/models"
-)
+	"net/http"
 
+	"github.com/gin-gonic/gin"
+)
 
 func GetCategories(c *gin.Context) {
 	var categories []models.Category
@@ -17,7 +17,6 @@ func GetCategories(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"data": categories})
 }
-
 
 func GetFullMenu(c *gin.Context) {
 	var categories []models.Category

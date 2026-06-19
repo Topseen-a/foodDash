@@ -2,16 +2,17 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+
 export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+    e.preventDefault(); setError(""); setLoading(true);
     try {
       const user = await login(form.email, form.password);
       navigate(user.role === "staff" ? "/staff" : "/");
