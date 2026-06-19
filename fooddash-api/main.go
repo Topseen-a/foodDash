@@ -3,6 +3,9 @@ package main
 import (
 	"fooddash-api/config"
 	"fooddash-api/db"
+	"fooddash-api/handlers"
+	"fooddash-api/ws"
+
 	// "fooddash-api/handlers"
 	"fooddash-api/middleware"
 	"fooddash-api/routes"
@@ -20,14 +23,14 @@ func main() {
 	}
 
 	cfg := config.Load()
-	// handlers.SetConfig(cfg)
+	//handlers.SetConfig(cfg)
 	db.Connect(cfg)
 
 	r := gin.Default()
 	r.Use(cors.New(middleware.CORSConfig()))
 
-	// go ws.GlobalHub.Run()
-	// r.GET("/ws/orders/:id", handlers.ServeWS)
+	go ws.GlobalHub.Run()
+	r.GET("/ws/orders/:id", handlers.ServeWS)
 
 	routes.SetupRoutes(r)
 	log.Printf("Starting server on :%s", cfg.Port)

@@ -159,3 +159,47 @@ func CreateCategory(c *gin.Context) {
 	}
 	c.JSON(http.StatusCreated, gin.H{"data": cat})
 }
+
+func GetDailySummary(c *gin.Context) {
+	type Summary struct {
+		TotalOrders  int64            `json:"total_orders"`
+		TotalRevenue float64          `json:"total_revenue"`
+		ByStatus     map[string]int64 `json:"by_status"`
+	}
+	var total int64
+	var revenue float64
+	db.DB.Model(&models.Order{}).Where("DATE(created_at) = CURRENT_DATE").Count(&total)
+	db.DB.Model(&models.Order{}).Where("DATE(created_at) = CURRENT_DATE AND status != ?", models.StatusCancelled).Select("COALESCE(SUM(total_amount),0)").Scan(&revenue)
+	statuses := []models.OrderStatus{
+		models.StatusReceived, models.StatusPreparing, models.StatusReady,
+		models.StatusDelivered, models.StatusPickedUp, models.StatusCancelled,
+	}
+	byStatus := map[string]int64{}
+	for _, s := range statuses {
+		var count int64
+		db.DB.Model(&models.Order{}).Where("DATE(created_at) = CURRENT_DATE AND status = ?", s).Count(&count)
+		byStatus[string(s)] = count
+	}
+	c.JSON(http.StatusOK, gin.H{"data": Summary{TotalOrders: total,
+		TotalRevenue: revenue, ByStatus: byStatus}})
+}
+
+func SetSoldOutNote(c *gin.Context) {
+	var item models.MenuItem
+	if err := db.DB.First(&item, c.Param("id")).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
+		return
+	}
+
+	var input struct {
+		Note string `json:"note"`
+	}
+
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		return
+	}
+
+	db.DB.Model(&item).Update("sold_out_note", input.Note)
+	c.JSON(http.StatusOK, gin.H{"data": item})
+}
