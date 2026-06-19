@@ -118,35 +118,3 @@ func GetOrder(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": order})
 }
-
-func UpdateOrderStatus(c *gin.Context) {
-	var order models.Order
-	var input models.UpdateOrderStatusInput
-
-	if err := db.DB.First(&order, c.Param("id")).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
-		return
-	}
-
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	order.Status = input.Status
-
-	if err := db.DB.Save(&order).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	if err := db.DB.Create(&models.OrderEvent{
-		OrderID: order.ID,
-		Status:  input.Status,
-	}).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": order})
-}
