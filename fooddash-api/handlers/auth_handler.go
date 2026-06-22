@@ -12,9 +12,11 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-
 var cfg config.Config
 
+func SetConfig(c config.Config) {
+	cfg = c
+}
 
 func RegisterUser(c *gin.Context) {
 	var input models.RegisterInput
@@ -31,8 +33,8 @@ func RegisterUser(c *gin.Context) {
 	}
 
 	user := models.User{
-		Name:     input.Name,
-		Email:    input.Email,
+		Name:         input.Name,
+		Email:        input.Email,
 		PasswordHash: string(hash),
 	}
 
@@ -42,7 +44,6 @@ func RegisterUser(c *gin.Context) {
 	}
 	c.JSON(http.StatusCreated, gin.H{"data": user})
 }
-
 
 func LoginUser(c *gin.Context) {
 	var input models.LoginInput
@@ -64,9 +65,9 @@ func LoginUser(c *gin.Context) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": user.ID,
-		"role":    user.Role,
-		"exp":   time.Now().Add(24 * time.Hour).Unix(),
+		"sub":  user.ID,
+		"role": user.Role,
+		"exp":  time.Now().Add(24 * time.Hour).Unix(),
 	})
 
 	signed, err := token.SignedString([]byte(cfg.JWTSecret))
@@ -75,6 +76,6 @@ func LoginUser(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
 		return
 	}
-	
+
 	c.JSON(http.StatusOK, gin.H{"token": signed, "user": user})
 }

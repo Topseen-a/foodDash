@@ -23,7 +23,7 @@ func main() {
 	}
 
 	cfg := config.Load()
-	//handlers.SetConfig(cfg)
+	handlers.SetConfig(cfg)
 	db.Connect(cfg)
 
 	r := gin.Default()
