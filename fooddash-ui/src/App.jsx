@@ -10,7 +10,7 @@ import CartPage from './pages/CartPage';
 import OrderPage from './pages/OrderPage'; 
 import OrderHistoryPage from './pages/OrderHistoryPage';
 import StaffDashboard from './pages/StaffDashboard'; 
-// import MenuManagementPage from './pages/MenuManagementPage';
+import MenuManagementPage from './pages/MenuManagementPage';
 
 
 export default function App(){
@@ -30,8 +30,8 @@ export default function App(){
                     /></ProtectedRoute>}/>
                     <Route path='/staff' element={<ProtectedRoute staffOnly><StaffDashboard
                     /></ProtectedRoute>}/>
-                    {/* <Route path='/staff/menu' element={<ProtectedRoute staffOnly><MenuManagementPage
-                    /></ProtectedRoute>}/>  */}
+                    <Route path='/staff/menu' element={<ProtectedRoute staffOnly><MenuManagementPage
+                    /></ProtectedRoute>}/> 
                     <Route path='*' element={<Navigate to='/' replace/>}/>
                 </Routes>
             </main>

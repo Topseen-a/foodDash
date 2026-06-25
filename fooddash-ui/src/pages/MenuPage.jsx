@@ -67,9 +67,12 @@ export default function MenuPage(){
               )}{" "}
               <div className="flex-1">
                 <h3 className="font-bold text-lg">{item.name}</h3>
-                <p className="text-gray-500 text-sm mt-1">
-                  {item.description}
-                </p>
+                <p className="text-gray-500 text-sm mt-1">{item.description}</p>
+                {!item.is_available && (
+                  <p className="text-xs text-red-500 italic mt-1">
+                    {item.sold_out_note || "Currently unavailable"}
+                  </p>
+                )}
               </div>{" "}
               <div className="flex justify-between items-center">
                 <span className="text-orange-500 font-bold text-lg">
