@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-// import { updateCartItem, removeCartItem, placeOrder } from "../api/endpoints";
+import { updateCartItem, removeCartItem, placeOrder } from "../api/endpoints";
 
 
 export default function CartPage() {
@@ -46,12 +46,12 @@ export default function CartPage() {
     setError("");
     setPlacing(true);
     try {
-    //   const { data } = await placeOrder({
-    //     type: orderType,
-    //     delivery_address: address,
-    //   });
+      const { data } = await placeOrder({
+        type: orderType,
+        delivery_address: address,
+      });
       await refreshCart();
-      navigate(`/orders/${data.data.id}`);
+      navigate(`/orders/${data.data.ID}`);
     } catch (err) {
       setError(err.response?.data?.error || "Failed to placeorder");
     } finally {
@@ -77,7 +77,7 @@ export default function CartPage() {
       <div className="space-y-4">
         {cart.items.map((item) => (
           <div
-            key={item.id}
+            key={item.ID}
             className="bg-white rounded-xl shadow p-4 flex gap-4"
           >
             <div className="flex-1">
@@ -97,20 +97,20 @@ export default function CartPage() {
             </div>
             <div className="flex items-center gap-3">
               <button
-                onClick={() => handleQty(item.id, item.quantity - 1)}
+                onClick={() => handleQty(item.ID, item.quantity - 1)}
                 className="w-8 h-8 bg-gray-100 rounded-full font-bold"
               >
                 −
               </button>
               <span className="w-6 text-center font-bold">{item.quantity}</span>
               <button
-                onClick={() => handleQty(item.id, item.quantity + 1)}
+                onClick={() => handleQty(item.ID, item.quantity + 1)}
                 className="w-8 h-8 bg-gray-100 rounded-full font-bold"
               >
                 +
               </button>
               <button
-                onClick={() => handleRemove(item.id)}
+                onClick={() => handleRemove(item.ID)}
                 className="text-red-400 hover:text-red-600 ml-2"
               >
                 🗑

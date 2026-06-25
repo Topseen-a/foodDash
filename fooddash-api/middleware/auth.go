@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	// "fmt"
 	"fooddash-api/db"
 	"fooddash-api/models"
 	"net/http"
@@ -27,6 +28,7 @@ func RequireAuth(c *gin.Context) {
 		return []byte(os.Getenv("JWT_SECRET")), nil
 	})
 	if err != nil || !token.Valid {
+		// fmt.
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 		return
 	}

@@ -1,11 +1,11 @@
 import { Link,useNavigate } from 'react-router-dom'; 
 import{ useAuth } from '../context/AuthContext'; 
-// import{ useCart} from '../context/CartContext'; 
+import{ useCart} from '../context/CartContext'; 
 
 
 export default function Navbar(){
     const{ user, logout, isStaff } = useAuth();
-    // const{ itemCount } = useCart();
+    const{ itemCount } = useCart();
     const navigate = useNavigate(); 
     return(
         <nav className='bg-orange-500 text-white px-6 py-4 flex justify-between items-center shadow'>
@@ -20,12 +20,12 @@ export default function Navbar(){
             {user && !isStaff&&(
                 <><Link to='/cart' className='relative'>
                     Cart
-                 {/* {
+                 {
                  itemCount> 0 &&
                  ( <span className='absolute top-2 right-3 bg-red-500 text-xs rounded-full w-5 h-5 flex items-center justify-center'>
                      {itemCount} 
-                     </span> )}  */}
-                </Link><Link to='/orders'>MyOrders</Link></>
+                     </span> )} 
+                </Link><Link to='/orders'>My Orders</Link></>
             )}
             {user? <button onClick={()=> {logout();
                 navigate('/');}}>Logout</button>

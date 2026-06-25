@@ -22,11 +22,11 @@ export default function App(){
                     <Route path='/' element={<MenuPage/>}/>
                     <Route path='/login' element={<LoginPage/>} />
                     <Route path='/register' element={<RegisterPage/>}/>
-                    {/* <Route path='/cart' element={<ProtectedRoute><CartPage
-                     /></ProtectedRoute>}/>  */}
+                    <Route path='/cart' element={<ProtectedRoute><CartPage
+                     /></ProtectedRoute>}/> 
                     <Route path='/orders' element={<ProtectedRoute><OrderHistoryPage
                     /></ProtectedRoute>}/>
-                    <Route path='/orders/:id' element={<ProtectedRoute><OrderPage
+                    <Route path='/orders/:ID' element={<ProtectedRoute><OrderPage
                     /></ProtectedRoute>}/>
                     <Route path='/staff' element={<ProtectedRoute staffOnly><StaffDashboard
                     /></ProtectedRoute>}/>

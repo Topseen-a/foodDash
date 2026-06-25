@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useOrderStatus } from "../hooks/useOrderStatus";
-
+import OrderTimeline from "../components/OrderTimeline";
 
 function StatusBadge({ status }) {
   const s = {
@@ -52,8 +52,8 @@ function StatusTracker({ status, type }) {
 
 
 export default function OrderPage() {
-  const { id } = useParams();
-  const { order } = useOrderStatus(id); // polling now, WebSocket in W3
+  const { ID } = useParams();
+  const { order } = useOrderStatus(ID); // polling now, WebSocket in W3
   if (!order)
     return (
       <div className="text-center py-20 text-gray-400">Loading order...</div>
@@ -63,7 +63,7 @@ export default function OrderPage() {
       <div className="bg-white rounded-xl shadow p-6">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h1 className="text-2xl font-bold">Order #{order.id}</h1>
+            <h1 className="text-2xl font-bold">Order #{order.ID}</h1>
             <p className="text-gray-500 text-sm capitalize">
               {order.type} order
             </p>
@@ -81,7 +81,7 @@ export default function OrderPage() {
         )}
         <div className="divide-y">
           {order.items?.map((item) => (
-            <div key={item.id} className="py-3 flex justify-between">
+            <div key={item.ID} className="py-3 flex justify-between">
               <div>
                 <p className="font-medium">{item.menu_item.name}</p>
                 {item.special_instructions && (
@@ -105,6 +105,7 @@ export default function OrderPage() {
             ₦{order.total_amount?.toFixed(2)}
           </span>
         </div>
+        <OrderTimeline events={order.events} />
         <Link
           to="/"
           className="block text-center mt-6 text-orange-500 hover:underline"

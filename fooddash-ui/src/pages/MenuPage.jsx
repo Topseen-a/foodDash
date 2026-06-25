@@ -1,13 +1,13 @@
 import { useState,useEffect } from 'react'; 
 import { useNavigate } from 'react-router-dom'; 
-import { getMenu } from '../api/endpoints'; 
+import { getMenu, addToCart } from '../api/endpoints'; 
 import { useAuth } from '../context/AuthContext'; 
-// import { useCart } from '../context/CartContext'; 
+import { useCart } from '../context/CartContext'; 
 
 
 export default function MenuPage(){ 
     const {user} =useAuth(); 
-    // const { refreshCart } = useCart();
+    const { refreshCart } = useCart();
     const navigate = useNavigate(); 
     const [menu,setMenu] = useState([]);
     const [activeTab,setTab] = useState(null); 
@@ -16,7 +16,7 @@ export default function MenuPage(){
     useEffect(()=> { 
         getMenu().then(({data}) => {
             setMenu(data.data); 
-            if(data.data.length>0) setTab(data.data[0].id);
+            if(data.data.length>0) setTab(data.data[0].ID);
             });
         }, []);
 
@@ -25,8 +25,8 @@ export default function MenuPage(){
         if (!user) { navigate('/login'); return; }
         setAdding(menuItemId);
         try{
-            await addToCart({menu_item_id:menuItemId,quantity:1 });
-            // await refreshCart();
+            await addToCart({menu_item_id:menuItemId,quantity:1 }); 
+            await refreshCart();
         } catch(err) {
             alert(err.response?.data?.error||'Could not add to cart');
         } finally{
@@ -35,7 +35,7 @@ export default function MenuPage(){
     };
 
 
-    const activeCategory = menu.find(c=> c.id===activeTab);
+    const activeCategory = menu.find(c=> c.ID===activeTab);
     return (
       <div>
         <h1 className="text-3xl font-bold mb-6">Our Menu</h1>
@@ -43,9 +43,9 @@ export default function MenuPage(){
           {" "}
           {menu.map((cat) => (
             <button
-              key={cat.id}
-              onClick={() => setTab(cat.id)}
-              className={`px-4 py-2  rounded-full whitespace-nowrap ${activeTab === cat.id ? "bg-orange-500 text-white" : "bg-gray-100 hover:bg-gray-200"}`}
+              key={cat.ID}
+              onClick={() => setTab(cat.ID)}
+              className={`px-4 py-2  rounded-full whitespace-nowrap ${activeTab === cat.ID ? "bg-orange-500 text-white" : "bg-gray-100 hover:bg-gray-200"}`}
             >
               {cat.name}{" "}
             </button>
@@ -55,7 +55,7 @@ export default function MenuPage(){
           {" "}
           {activeCategory?.items?.map((item) => (
             <div
-              key={item.id}
+              key={item.ID}
               className="bg-white rounded-xl shadow p-4 flex flex-col gap-3"
             >
               {item.image_url && (
@@ -76,12 +76,12 @@ export default function MenuPage(){
                   ₦{item.price?.toFixed(2)}
                 </span>
                 <button
-                  onClick={() => handleAdd(item.id)}
-                  disabled={adding === item.id}
+                  onClick={() => handleAdd(item.ID)}
+                  disabled={adding === item.ID}
                   className="bg-orange-500 text-white px-4 py-1.5 rounded-lg hover:bg-orange-600 disabled:opacity-50 text-sm"
                 >
                   {" "}
-                  {adding === item.id ? "Adding..." : "+Add"}{" "}
+                  {adding === item.ID ? "Adding..." : "+Add"}{" "}
                 </button>
               </div>
             </div>

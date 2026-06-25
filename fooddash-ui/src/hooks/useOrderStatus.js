@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-// import { getOrder } from '../api/endpoints';
+import { getOrder } from '../api/endpoints';
 
 
 export function useOrderStatus(orderId) {
@@ -11,14 +11,14 @@ export function useOrderStatus(orderId) {
     useEffect(() => {
         if (!orderId) return;
         const fetchOrder = async () => {
-        // try {
-        //     const { data } = await getOrder(orderId);
-        //     setOrder(data.data);
-        //     if (TERMINAL.includes(data.data.status))
-        //         clearInterval(intervalRef.current);
-        // } catch (e) {
-        //     console.error('Polling error:', e);
-        // }
+        try {
+            const { data } = await getOrder(orderId);
+            setOrder(data.data);
+            if (TERMINAL.includes(data.data.status))
+                clearInterval(intervalRef.current);
+        } catch (e) {
+            console.error('Polling error:', e);
+        }
         };
         fetchOrder();
         intervalRef.current = setInterval(fetchOrder, 5000);

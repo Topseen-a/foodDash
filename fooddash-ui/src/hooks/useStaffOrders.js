@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-// import { getTodaysOrders } from '../api/endpoints';
+import { getTodaysOrders } from '../api/endpoints';
 
 
 // Polls for today's orders every 10 seconds.
@@ -11,10 +11,10 @@ export function useStaffOrders(statusFilter = '') {
 
     const fetchOrders = async () => {
         try {
-            // const { data } = await getTodaysOrders();
-            // const filtered = statusFilter ?
-            //     data.data.filter(o => o.status === statusFilter) : data.data;
-            // setOrders(filtered);
+            const { data } = await getTodaysOrders();
+            const filtered = statusFilter ?
+                data.data.filter(o => o.status === statusFilter) : data.data;
+            setOrders(filtered);
         } catch (e) { console.error(e); }
         finally { setLoading(false); }
     };

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-// import { getMyOrders } from "../api/endpoints";
+import { getMyOrders } from "../api/endpoints";
 
 
 function StatusBadge({ status }) {
@@ -26,9 +26,9 @@ export default function OrderHistoryPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    // getMyOrders()
-    //   .then(({ data }) => setOrders(data.data))
-    //   .finally(() => setLoading(false));
+    getMyOrders()
+      .then(({ data }) => setOrders(data.data))
+      .finally(() => setLoading(false));
   }, []);
   if (loading)
     return <div className="text-center py-20">Loading orders...</div>;
@@ -41,8 +41,8 @@ export default function OrderHistoryPage() {
         <div className="space-y-4">
           {orders.map((order) => (
             <Link
-              key={order.id}
-              to={`/orders/${order.id}`}
+              key={order.ID}
+              to={`/orders/${order.ID}`}
               className="block bg-white rounded-xl shadow p-4 hover:shadow-md transition-shadow"
             >
               <div className="flex justify-between items-center">

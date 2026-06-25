@@ -1,5 +1,5 @@
 import { useState } from "react";
-// import { updateOrderStatus } from "../api/endpoints";
+import { updateOrderStatus } from "../api/endpoints";
 import { useStaffOrders } from "../hooks/useStaffOrders";
 
 
@@ -45,7 +45,7 @@ function OrderCard({ order, onStatusChange }) {
     const handleAction = async (newStatus) => {
     setLoading(true);
     try {
-    //   await updateOrderStatus(order.id, { status: newStatus });
+      await updateOrderStatus(order.id, { status: newStatus });
       onStatusChange();
     } catch (err) {
       alert(err.response?.data?.error || "Failed");
