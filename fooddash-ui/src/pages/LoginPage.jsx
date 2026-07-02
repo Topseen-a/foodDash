@@ -57,6 +57,12 @@ export default function LoginPage() {
           Register
         </Link>
       </p>
+      <p className="text-center mt-2 text-sm">
+        Staff member?
+        <Link to="/staff/register" className="text-orange-500">
+          Staff Registration
+        </Link>
+      </p>
     </div>
   );
 }

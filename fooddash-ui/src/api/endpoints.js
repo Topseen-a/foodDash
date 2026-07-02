@@ -2,8 +2,9 @@
 
 
  // All API calls in one file—easy to find and update. 
- export const register = data => api.post('/auth/register',data); 
- export const login = data => api.post('/auth/login',data); 
+ export const register = data => api.post('/auth/register',data);
+ export const registerStaff = data => api.post('/auth/register-staff',data);
+ export const login = data => api.post('/auth/login',data);
  export const getMenu = () => api.get('/menu'); 
  export const getCategories= () => api.get('/categories'); 
  export const getCart = () =>api.get('/cart'); 
@@ -21,3 +22,5 @@
  export const updateMenuItem = (id,data)=>api.put(`/staff/menu/${id}`, data); 
  export const toggleAvailability= id => api.patch(`/staff/menu/${id}/availability`); 
  export const createCategory = data =>api.post('/staff/categories', data);
+ export const getDailySummary = () =>api.get('/staff/summary');
+ export const setSoldOutNote = (id,data)=>api.patch(`/staff/menu/${id}/sold-out-note`, data);

@@ -7,7 +7,7 @@ import (
 
 
 type Config struct {
-	DBHost, DBUser, DBPassword, DBName, DBPort, Port, JWTSecret string
+	DBHost, DBUser, DBPassword, DBName, DBPort, Port, JWTSecret, StaffCode string
 }
 
 
@@ -18,8 +18,9 @@ func Load() Config {
 		DBPassword: getEnv("DB_PASSWORD", ""),
 		DBName:getEnv("DB_NAME","fooddash"),
 		DBPort:getEnv("DB_PORT","5432"),
-		Port:getEnv("PORT","8080"),
-		JWTSecret:getEnv("JWT_SECRET","change_me"),
+		Port:      getEnv("PORT", "8080"),
+		JWTSecret: getEnv("JWT_SECRET", "change_me"),
+		StaffCode: getEnv("STAFF_CODE", ""),
 	}
 }
 

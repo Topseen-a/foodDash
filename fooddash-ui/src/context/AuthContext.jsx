@@ -1,5 +1,5 @@
 import { createContext,useContext,useState} from 'react';
-import { login as loginAPI,register as registerAPI} from '../api/endpoints'; 
+import { login as loginAPI,register as registerAPI,registerStaff as registerStaffAPI} from '../api/endpoints';
 
 const AuthContext = createContext(null);
 
@@ -23,13 +23,19 @@ export function AuthProvider({children}) {
      };
 
 
+     const registerStaff= async(name,email,password,staffCode)=> {
+         const{ data }= await registerStaffAPI({name,email,password,staff_code:staffCode});
+         return data;
+     };
+
+
      const logout= ()=>{
          localStorage.removeItem('token');
          localStorage.removeItem('user');
          setUser(null);
      };
      return(
-         <AuthContext.Provider value={{user,login,logout,register, isStaff: user?.role==='staff'}}>
+         <AuthContext.Provider value={{user,login,logout,register,registerStaff, isStaff: user?.role==='staff'}}>
              {children}
          </AuthContext.Provider> );
 }

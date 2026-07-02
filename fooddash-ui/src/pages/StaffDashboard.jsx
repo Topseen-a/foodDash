@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { updateOrderStatus } from "../api/endpoints";
 import { useStaffOrders } from "../hooks/useStaffOrders";
+import DailySummary from "../components/DailySummary";
 
 
 // Maps each status to the action buttons visible on that order card.
@@ -45,7 +46,7 @@ function OrderCard({ order, onStatusChange }) {
     const handleAction = async (newStatus) => {
     setLoading(true);
     try {
-      await updateOrderStatus(order.id, { status: newStatus });
+      await updateOrderStatus(order.ID, { status: newStatus });
       onStatusChange();
     } catch (err) {
       alert(err.response?.data?.error || "Failed");
@@ -57,7 +58,7 @@ function OrderCard({ order, onStatusChange }) {
       <div className="bg-white rounded-xl shadow p-4">
         <div className="flex justify-between items-start mb-3">
           <div>
-            <p className="font-bold text-lg">Order #{order.id}</p>
+            <p className="font-bold text-lg">Order #{order.ID}</p>
             <p className="text-sm text-gray-500 capitalize">
               {order.type} • {new Date(order.created_at).toLocaleTimeString()}
             </p>
@@ -66,7 +67,7 @@ function OrderCard({ order, onStatusChange }) {
         </div>
         <div className="divide-y mb-3">
           {order.items?.map((item) => (
-            <div key={item.id} className="py-1.5 flex justify-between text-sm">
+            <div key={item.ID} className="py-1.5 flex justify-between text-sm">
               <span>
                 {item.menu_item.name} × {item.quantity}
               </span>
@@ -92,7 +93,7 @@ function OrderCard({ order, onStatusChange }) {
                 key={a.status}
                 onClick={() => handleAction(a.status)}
                 disabled={loading}
-                className={`px-3 py-1.5 text-white rounded-lg text-sm font-medium${a.color} disabled:opacity-50`}
+                className={`px-3 py-1.5 text-white rounded-lg text-sm font-medium ${a.color} disabled:opacity-50`}
               >
                 {loading ? "..." : a.label}
               </button>
@@ -129,14 +130,17 @@ export default function StaffDashboard() {
             ↻ Refresh
           </button>
         </div>
+        <DailySummary />
         <div className="flex gap-2 mb-6">
-          <button
-            key={f}
-            onClick={() => setFilter(f)}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium${filter === f ? "bg-orange-500 text-white" : "bg-gray-100 hover:bg-gray-200"}`}
-          >
-            {LABELS[f]}
-          </button>
+          {FILTERS.map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium ${filter === f ? "bg-orange-500 text-white" : "bg-gray-100 hover:bg-gray-200"}`}
+            >
+              {LABELS[f]}
+            </button>
+          ))}
         </div>
         {loading ? (
           <p className="text-center text-gray-400 py-10">Loading orders...</p>
@@ -145,7 +149,7 @@ export default function StaffDashboard() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {orders.map((order) => (
-              <OrderCard key={order.id} order={order} onStatusChange={refresh} />
+              <OrderCard key={order.ID} order={order} onStatusChange={refresh} />
             ))}
           </div>
         )}

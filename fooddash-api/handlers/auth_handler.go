@@ -45,6 +45,38 @@ func RegisterUser(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"data": user})
 }
 
+func RegisterStaff(c *gin.Context) {
+	var input models.RegisterStaffInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if cfg.StaffCode == "" || input.StaffCode != cfg.StaffCode {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Invalid staff code"})
+		return
+	}
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not hash password"})
+		return
+	}
+
+	user := models.User{
+		Name:         input.Name,
+		Email:        input.Email,
+		PasswordHash: string(hash),
+		Role:         models.RoleStaff,
+	}
+
+	if err := db.DB.Create(&user).Error; err != nil {
+		c.JSON(http.StatusConflict, gin.H{"error": "Email already registered"})
+		return
+	}
+	c.JSON(http.StatusCreated, gin.H{"data": user})
+}
+
 func LoginUser(c *gin.Context) {
 	var input models.LoginInput
 	if err := c.ShouldBindJSON(&input); err != nil {

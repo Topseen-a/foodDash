@@ -28,7 +28,7 @@ func isValidTransition(from, to models.OrderStatus) bool {
 
 func GetTodaysOrders(c *gin.Context) {
 	var orders []models.Order
-	query := db.DB.Where("DATE(created_at) = CURRENT_DATE").Order("created_atasc").Preload("Items.MenuItem")
+	query := db.DB.Where("DATE(created_at) = CURRENT_DATE").Order("created_at asc").Preload("Items.MenuItem")
 
 	if status := c.Query("status"); status != "" {
 		query = query.Where("status = ?", status)
@@ -81,7 +81,7 @@ func UpdateOrderStatus(c *gin.Context) {
 
 func GetMenuAdmin(c *gin.Context) {
 	var categories []models.Category
-	err := db.DB.Order("display_orderasc").Preload("Items").Find(&categories).Error
+	err := db.DB.Order("display_order asc").Preload("Items").Find(&categories).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -123,7 +123,13 @@ func UpdateMenuItem(c *gin.Context) {
 		return
 	}
 
-	db.DB.Model(&item).Updates(models.MenuItem{CategoryID: input.CategoryID, Name: input.Name, Description: input.Description, Price: input.Price, ImageURL: input.ImageURL})
+	db.DB.Model(&item).Updates(map[string]interface{}{
+		"category_id": input.CategoryID,
+		"name":        input.Name,
+		"description": input.Description,
+		"price":       input.Price,
+		"image_url":   input.ImageURL,
+	})
 	c.JSON(http.StatusOK, gin.H{"data": item})
 }
 
