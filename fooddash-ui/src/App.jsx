@@ -10,11 +10,7 @@ import StaffRegisterPage from './pages/StaffRegisterPage';
 import CartPage from './pages/CartPage';
 import OrderPage from './pages/OrderPage';
 import OrderHistoryPage from './pages/OrderHistoryPage';
-<<<<<<< HEAD
-import StaffDashboard from './pages/StaffDashboard'; 
-=======
 import StaffDashboard from './pages/StaffDashboard';
->>>>>>> be84900 (completed)
 import MenuManagementPage from './pages/MenuManagementPage';
 
 
@@ -37,11 +33,7 @@ export default function App(){
                     <Route path='/staff' element={<ProtectedRoute staffOnly><StaffDashboard
                     /></ProtectedRoute>}/>
                     <Route path='/staff/menu' element={<ProtectedRoute staffOnly><MenuManagementPage
-<<<<<<< HEAD
-                    /></ProtectedRoute>}/> 
-=======
                     /></ProtectedRoute>}/>
->>>>>>> be84900 (completed)
                     <Route path='*' element={<Navigate to='/' replace/>}/>
                 </Routes>
             </main>
